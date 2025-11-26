@@ -257,6 +257,10 @@ func resourceVirtualServerCreate(ctx context.Context, d *schema.ResourceData, m 
 		return diag.Errorf("failed to await completion: %s", err)
 	}
 
+	// wait a little for vm to start, makes ip list available
+	// TODO properly wait for vm to be running (guest_tools_status = "Inactive" -> "active")
+	time.Sleep(time.Minute)
+
 	d.SetId(vmIdentifier)
 
 	return resourceVirtualServerRead(ctx, d, m)
